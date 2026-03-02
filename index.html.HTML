@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>B2 PASANGA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{margin:0;font-family:Arial;}
+button{padding:8px 15px;background:#0f2027;color:white;border:none;border-radius:5px;cursor:pointer;margin:5px;}
+button:hover{background:#203a43;}
+input{padding:8px;margin:5px;border:1px solid #ccc;border-radius:5px;}
+
+/* LOGIN */
+.login-page{
+height:100vh;
+background:linear-gradient(to right,#0f2027,#203a43,#2c5364);
+display:flex;justify-content:center;align-items:center;
+}
+.login-box{
+width:350px;background:white;padding:40px;border-radius:10px;text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,0.3);
+}
+#error{color:red;}
+
+/* COMMON PAGE */
+.page{display:none;text-align:center;background:#f4f6f9;min-height:100vh;padding:20px;}
+
+/* MEMBER CARD */
+.card{
+display:inline-block;margin:15px;padding:20px;background:white;border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);width:180px;
+}
+.card img{
+width:120px;height:120px;border-radius:50%;object-fit:cover;margin-bottom:10px;
+border:3px solid #0f2027;
+}
+
+/* TABLE */
+table{width:100%;border-collapse:collapse;background:white;}
+th,td{border:1px solid #ccc;padding:10px;text-align:center;}
+th{background:#2c3e50;color:white;}
+.admin-only{display:none;}
+.dashboard{width:95%;margin:auto;padding:20px;background:white;border-radius:10px;}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN PAGE -->
+<div class="login-page" id="loginPage">
+<div class="login-box">
+<h2>B2 PASANGA</h2>
+<input type="text" id="username" placeholder="Username"><br>
+<input type="password" id="password" placeholder="Password"><br>
+<button onclick="loginUser()">Login</button>
+<div id="error"></div>
+</div>
+</div>
+
+<!-- MEMBERS PAGE -->
+<div class="page" id="membersPage">
+<h1>B2 PASANGA</h1>
+
+<div class="card"><img src="3.jpg"><h3>PRAVEEN</h3></div>
+<div class="card"><img src="1.jpg"><h3>DARWIN</h3></div>
+<div class="card"><img src="5.jpg"><h3>JASON</h3></div>
+<div class="card"><img src="4.jpg"><h3>SANJEEV</h3></div>
+<div class="card"><img src="6.jpg"><h3>JAVANSEKAR</h3></div>
+<div class="card"><img src="2.jpg"><h3>VISHWA</h3></div>
+
+<br><br>
+
+<button onclick="markIn()">IN</button>
+<button onclick="markOut()">OUT</button>
+<button onclick="openCleaning()">Cleaning</button>
+<button onclick="openMonitor()">Admin Monitor</button>
+<button onclick="logout()">Logout</button>
+</div>
+
+<!-- CLEANING PAGE -->
+<div class="page" id="cleaningPage">
+<h1>🏠 Cleaning Dashboard</h1>
+
+<div class="dashboard">
+<table>
+<tr>
+<th>Week</th>
+<th>Area</th>
+<th>Assignee</th>
+<th>Status</th>
+<th>Date</th>
+<th>Reason</th>
+<th class="admin-only">Edit</th>
+</tr>
+
+<tr>
+<td>Week 1</td>
+<td>Room Cleaning</td>
+<td contenteditable="false" class="editable">Praveen</td>
+<td>
+<select disabled class="editable">
+<option>Not Started</option>
+<option>In Progress</option>
+<option>Completed</option>
+<option>Leave</option>
+</select>
+</td>
+<td><input type="date" disabled class="editable"></td>
+<td><input type="text" disabled class="editable"></td>
+<td class="admin-only"><button>Update</button></td>
+</tr>
+
+<tr>
+<td>Week 2</td>
+<td>Bathroom Cleaning</td>
+<td contenteditable="false" class="editable">Sanjeev</td>
+<td>
+<select disabled class="editable">
+<option>Not Started</option>
+<option>In Progress</option>
+<option>Completed</option>
+<option>Leave</option>
+</select>
+</td>
+<td><input type="date" disabled class="editable"></td>
+<td><input type="text" disabled class="editable"></td>
+<td class="admin-only"><button>Update</button></td>
+</tr>
+
+<tr>
+<td>Week 3</td>
+<td>Corridor Cleaning</td>
+<td contenteditable="false" class="editable">Vishwa</td>
+<td>
+<select disabled class="editable">
+<option>Not Started</option>
+<option>In Progress</option>
+<option>Completed</option>
+<option>Leave</option>
+</select>
+</td>
+<td><input type="date" disabled class="editable"></td>
+<td><input type="text" disabled class="editable"></td>
+<td class="admin-only"><button>Update</button></td>
+</tr>
+
+<tr>
+<td>Week 4</td>
+<td>Terrace Cleaning</td>
+<td contenteditable="false" class="editable">Jason</td>
+<td>
+<select disabled class="editable">
+<option>Not Started</option>
+<option>In Progress</option>
+<option>Completed</option>
+<option>Leave</option>
+</select>
+</td>
+<td><input type="date" disabled class="editable"></td>
+<td><input type="text" disabled class="editable"></td>
+<td class="admin-only"><button>Update</button></td>
+</tr>
+
+</table>
+</div>
+<br>
+<button onclick="backToMembers()">Back</button>
+</div>
+
+<!-- MONITOR PAGE -->
+<div class="page" id="monitorPage">
+<h1>📊 Admin Attendance Monitor</h1>
+
+<div class="dashboard">
+<table id="historyTable">
+<tr>
+<th>Name</th>
+<th>Action</th>
+<th>Time</th>
+</tr>
+</table>
+</div>
+
+<br>
+<button onclick="backToMembers()">Back</button>
+</div>
+
+<script>
+
+let isAdmin=false;
+let currentUser="";
+let historyLog=[];
+
+const users={
+"PRAVEEN":"25PBA146",
+"DARWIN":"25PBA104",
+"JASON":"25PBA106",
+"SANJEEV":"25PBA111",
+"JAVANSEKAR":"25PBA113",
+"VISHWA":"25PBA115"
+};
+
+function loginUser(){
+let username=document.getElementById("username").value.trim().toUpperCase();
+let password=document.getElementById("password").value.trim();
+
+if(users[username] && users[username]===password){
+currentUser=username;
+
+if(username==="VISHWA"){
+isAdmin=true;
+}
+
+document.getElementById("loginPage").style.display="none";
+document.getElementById("membersPage").style.display="block";
+}else{
+document.getElementById("error").innerText="Invalid Username or Password";
+}
+}
+
+function logout(){
+isAdmin=false;
+currentUser="";
+document.getElementById("membersPage").style.display="none";
+document.getElementById("cleaningPage").style.display="none";
+document.getElementById("monitorPage").style.display="none";
+document.getElementById("loginPage").style.display="flex";
+}
+
+function openCleaning(){
+document.getElementById("membersPage").style.display="none";
+document.getElementById("cleaningPage").style.display="block";
+
+if(isAdmin){
+enableAdmin();
+}
+}
+
+function backToMembers(){
+document.getElementById("cleaningPage").style.display="none";
+document.getElementById("monitorPage").style.display="none";
+document.getElementById("membersPage").style.display="block";
+}
+
+function enableAdmin(){
+let edits=document.querySelectorAll(".editable");
+edits.forEach(el=>{
+if(el.tagName==="TD"){el.contentEditable="true";}
+else{el.disabled=false;}
+});
+let adminCols=document.querySelectorAll(".admin-only");
+adminCols.forEach(col=>col.style.display="table-cell");
+}
+
+function markIn(){
+let time=new Date().toLocaleString();
+historyLog.push({name:currentUser,action:"IN",time:time});
+alert("IN Recorded");
+}
+
+function markOut(){
+let time=new Date().toLocaleString();
+historyLog.push({name:currentUser,action:"OUT",time:time});
+alert("OUT Recorded");
+}
+
+function openMonitor(){
+if(!isAdmin){
+alert("Only Admin Can Access Monitor");
+return;
+}
+
+document.getElementById("membersPage").style.display="none";
+document.getElementById("monitorPage").style.display="block";
+loadHistory();
+}
+
+function loadHistory(){
+let table=document.getElementById("historyTable");
+table.innerHTML="<tr><th>Name</th><th>Action</th><th>Time</th></tr>";
+
+historyLog.forEach(log=>{
+let row=table.insertRow();
+row.insertCell(0).innerText=log.name;
+row.insertCell(1).innerText=log.action;
+row.insertCell(2).innerText=log.time;
+});
+}
+
+</script>
+
+</body>
+</html>
